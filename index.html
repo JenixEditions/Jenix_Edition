@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JENIX_EDITIONS | Legend Cloud Fixed</title>
+    <title>JENIX_EDITIONS | Cloud Fixed v30</title>
     <link href="https://googleapis.com" rel="stylesheet">
     
     <!-- Firebase Bağlantıları -->
@@ -13,7 +13,7 @@
     <style>
         :root { --ana: #00f2ff; --bg: #030303; --panel: #0a0a0a; --kart: rgba(15, 15, 15, 0.98); --side: 260px; --right: 300px; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Rajdhani', sans-serif; }
-        body { background: var(--bg); color: #fff; display: flex; min-height: 100vh; overflow: hidden; }
+        body { background: var(--bg); color: #fff; display: flex; min-height: 100vh; overflow-x: hidden; padding-bottom: 40px; }
 
         /* AÇILIŞ ANİMASYONU */
         #splash { position: fixed; inset: 0; background: #000; z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: 0.8s; }
@@ -35,7 +35,7 @@
         .toggle-btn { position: fixed; right: 20px; top: 20px; width: 40px; height: 40px; background: var(--panel); border: 1px solid var(--ana); color: var(--ana); border-radius: 10px; cursor: pointer; z-index: 3000; display: flex; align-items: center; justify-content: center; font-weight: 900; }
 
         /* İÇERİK ALANI (MAIN) */
-        main { margin-left: var(--side); margin-right: var(--right); width: calc(100% - var(--side) - var(--right)); padding: 100px 40px 40px; transition: 0.5s; overflow-y: auto; height: 100vh; }
+        main { margin-left: var(--side); margin-right: var(--right); width: calc(100% - var(--side) - var(--right)); padding: 100px 40px 40px; transition: 0.5s; }
         main.full { margin-right: 0; width: calc(100% - var(--side)); }
         
         /* GRID & KARTLAR */
@@ -47,13 +47,14 @@
 
         /* REKLAM BANDI */
         .ticker { position: fixed; bottom: 0; left: 0; width: 100%; height: 40px; background: #000; border-top: 2px solid var(--ana); z-index: 5000; overflow: hidden; display: flex; align-items: center; }
-        .ticker-text { white-space: nowrap; animation: ticker 40s linear infinite; color: #fff; font-weight: 700; padding-left: 100%; }
-        @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-200%); } }
+        .ticker-text { white-space: nowrap; animation: ticker 40s linear infinite; color: #fff; font-weight: 700; }
+        @keyframes ticker { 0% { transform: translateX(100%); } 100% { transform: translateX(-150%); } }
 
         /* MODAL */
         .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.95); display: none; justify-content: center; align-items: center; z-index: 5000; }
         .m-box { background: #000; width: 400px; padding: 30px; border-radius: 25px; border: 1px solid var(--ana); text-align: center; }
-        input, select { width: 100%; padding: 12px; margin-bottom: 10px; background: #111; border: 1px solid #333; color: #fff; border-radius: 8px; }
+        input, select { width: 100%; padding: 12px; margin-bottom: 10px; background: #111; border: 1px solid #333; color: #fff; border-radius: 8px; outline:none; }
+        .btn { width: 100%; padding: 15px; background: var(--ana); border: none; font-weight: 900; cursor: pointer; border-radius: 10px; color: #000; }
     </style>
 </head>
 <body onload="initSystem()">
@@ -61,17 +62,22 @@
 <div id="splash"><div class="logo-load">JENIX_EDITIONS</div></div>
 <button class="toggle-btn" onclick="toggleRightSide()" id="tBtn">❮</button>
 
+<!-- SOL MENÜ -->
 <div class="sidebar">
     <div style="font-family:'Orbitron'; color:var(--ana); font-size:20px; text-align:center; margin-bottom:40px;">JENIX<span>_HUB</span></div>
-    <div class="nav-link aktif" id="navAll" onclick="render('Hepsi')">📂 TÜM ARŞİV</div>
-    <div class="nav-link" onclick="render('ETS 2')">🚛 ETS 2</div>
-    <div class="nav-link" onclick="render('Assetto')">🏎️ ASSETTO</div>
+    <div class="nav-link aktif" id="nav-Hepsi" onclick="render('Hepsi')">📂 TÜM ARŞİV</div>
+    <div class="nav-link" id="nav-ETS 2" onclick="render('ETS 2')">🚛 ETS 2</div>
+    <div class="nav-link" id="nav-Assetto" onclick="render('Assetto')">🏎️ ASSETTO</div>
+    <div class="nav-link" id="nav-BeamNG" onclick="render('BeamNG')">🚗 BEAMNG</div>
+    <div class="nav-link" id="nav-FS 25" onclick="render('FS 25')">🚜 FS 25</div>
+    
     <button id="adminLoginBtn" onclick="adminGiris()" style="margin-top:auto; background:none; border:1px solid var(--ana); color:var(--ana); padding:12px; border-radius:10px; cursor:pointer; font-weight:900;">🛠️ ADMİN GİRİŞİ</button>
 </div>
 
+<!-- HEADER -->
 <header id="header">
-    <input type="text" id="searchInp" placeholder="Mod ara..." onkeyup="ara(this.value)" style="background:#111; border:1px solid #333; color:#fff; padding:10px 25px; border-radius:30px; width:300px; outline:none;">
-    <div id="statusLabel" style="margin-left:auto; font-size:11px; color:#f1c40f; font-weight:900;">🟡 CLOUD INITIALIZING...</div>
+    <input type="text" placeholder="Hızlı mod ara..." onkeyup="ara(this.value)" style="background:#111; border:1px solid #333; color:#fff; padding:10px 25px; border-radius:30px; width:300px; outline:none;">
+    <div id="statusLabel" style="margin-left:auto; font-size:11px; color:#f1c40f; font-weight:900;">🟡 BULUT BAĞLANTISI...</div>
 </header>
 
 <div class="right-sidebar" id="rSide">
@@ -84,22 +90,26 @@
     </div>
 </div>
 
-<main id="main"><div class="grid" id="grid"></div></main>
+<main id="main">
+    <div class="grid" id="grid"></div>
+</main>
 
-<div class="ticker"><div class="ticker-text">🚀 JENIX_EDITIONS v29 CLOUD ACTIVE // YÜKLENEN TÜM MODLAR ARTIK DÜNYANIN HER YERİNDEN GÖRÜNÜYOR // TIKTOK: @jenix_edition // DISCORD SUNUCUMUZA KATILMAYI UNUTMAYIN!</div></div>
+<div class="ticker"><div class="ticker-text">🚀 JENIX_EDITIONS v30 CLOUD ACTIVE // TIKTOK: @jenix_edition // DISCORD: discord.gg/DNF9kt48fZ // TÜM MODLAR BULUT SİSTEMİNE BAĞLANDI.</div></div>
 
+<!-- ADMIN MODAL -->
 <div id="adminModal" class="modal">
     <div class="m-box">
-        <h2 style="color:var(--ana); margin-bottom:20px;">MOD YAYINLA</h2>
+        <h2 style="color:var(--ana); margin-bottom:20px; font-family:'Orbitron';">YENİ MOD EKLE</h2>
         <input type="text" id="nAd" placeholder="Mod Adı">
         <select id="nKat"><option>ETS 2</option><option>Assetto</option><option>BeamNG</option><option>FS 25</option></select>
         <input type="text" id="nRes" placeholder="Resim Linki"><input type="text" id="nVer" placeholder="Versiyon"><input type="text" id="nLink" placeholder="İndirme Linki">
-        <button onclick="ekle()" style="width:100%; padding:15px; background:var(--ana); color:#000; font-weight:900; border:none; border-radius:10px; cursor:pointer;">HUB'A YÜKLE</button>
-        <p onclick="document.getElementById('adminModal').style.display='none'" style="margin-top:10px; color:#444; cursor:pointer;">Kapat</p>
+        <button class="btn" onclick="ekle()">HUB'A YÜKLE</button>
+        <p onclick="document.getElementById('adminModal').style.display='none'" style="margin-top:10px; color:#444; cursor:pointer;">İptal</p>
     </div>
 </div>
 
 <script>
+    // FIREBASE AYARLARI
     const firebaseConfig = {
         apiKey: "AIzaSyAwghWuJfYJLYZ60W00S9pXpmaL1vVZ6OU",
         authDomain: "://firebaseapp.com",
@@ -107,49 +117,99 @@
         projectId: "jenixeditions",
         storageBucket: "jenixeditions.firebasestorage.app",
         messagingSenderId: "188588803275",
-        appId: "1:188588803275:web:6ff97f5ab141c5d85af04a"
+        appId: "1:188588803275:web:6ff97f5ab141c5d85af04a",
+        measurementId: "G-18X7NL3P1J"
     };
 
     let database;
     let isAdmin = false;
 
     function initSystem() {
+        // 2.5 saniye sonra splash her türlü kapanır
         setTimeout(() => document.getElementById('splash').classList.add('fade-out'), 2500);
+
         try {
             firebase.initializeApp(firebaseConfig);
             database = firebase.database();
-            render();
-        } catch (e) { document.getElementById('statusLabel').innerHTML = "🔴 CONNECT ERROR"; }
+            render('Hepsi');
+        } catch (e) {
+            document.getElementById('statusLabel').innerHTML = "🔴 FIREBASE BAĞLANTI HATASI";
+        }
     }
 
     function render(kat = 'Hepsi') {
         const g = document.getElementById('grid');
+        const st = document.getElementById('statusLabel');
+        
         if(!database) return;
+
+        // Nav linklerini güncelle
+        document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('aktif'));
+        const activeLink = document.getElementById('nav-' + kat);
+        if(activeLink) activeLink.classList.add('aktif');
+
         database.ref('modlar').on('value', (snap) => {
-            document.getElementById('statusLabel').innerHTML = "🟢 CLOUD ONLINE";
-            const data = snap.val(); g.innerHTML = "";
-            if(data) {
-                Object.keys(data).forEach(id => {
-                    const m = data[id];
-                    if(kat !== 'Hepsi' && m.kat !== kat) return;
-                    const silBtn = isAdmin ? 'display:block' : 'display:none';
-                    g.innerHTML += `<div class="kart" onclick="window.open('${m.link}')">
-                        <span style="position:absolute; top:10px; left:10px; background:#f39c12; color:#000; padding:2px 8px; font-size:10px; font-weight:900; border-radius:4px;">${m.ver}</span>
+            st.innerHTML = "🟢 BULUT AKTİF";
+            st.style.color = "#2ecc71";
+            
+            const data = snap.val();
+            g.innerHTML = "";
+            
+            if(!data) {
+                g.innerHTML = "<p style='color:#555;'>Henüz mod yüklenmedi.</p>";
+                return;
+            }
+
+            Object.keys(data).forEach(id => {
+                const m = data[id];
+                if(kat !== 'Hepsi' && m.kat !== kat) return;
+                
+                const silBtn = isAdmin ? 'display:block' : 'display:none';
+                g.innerHTML += `
+                    <div class="kart" onclick="window.open('${m.link}')">
+                        <span style="position:absolute; top:10px; left:10px; background:#f39c12; color:#000; padding:2px 8px; font-size:10px; font-weight:900; border-radius:4px;">${m.ver || 'v1.0'}</span>
                         <button class="del-btn" style="${silBtn}" onclick="event.stopPropagation(); modSil('${id}')">SİL</button>
                         <img src="${m.res}"><div style="padding:15px;"><small style="color:var(--ana)">${m.kat}</small><div style="font-weight:700;">${m.ad}</div></div></div>`;
-                });
-            }
+            });
         });
     }
 
-    function adminGiris() { if(prompt("Şifre:") === "1453") { isAdmin = true; render(); document.getElementById('adminModal').style.display='flex'; } else alert("Hata!"); }
+    function adminGiris() {
+        let pass = prompt("Yönetici Şifresini Girin:");
+        if(pass === "1453") {
+            isAdmin = true;
+            document.getElementById('adminModal').style.display = 'flex';
+            document.getElementById('adminLoginBtn').innerText = "✅ YÖNETİCİ AKTİF";
+            render('Hepsi');
+        } else {
+            alert("Şifre Hatalı!");
+        }
+    }
+
     function ekle() {
         const n = { ad: document.getElementById('nAd').value, kat: document.getElementById('nKat').value, res: document.getElementById('nRes').value, ver: document.getElementById('nVer').value, link: document.getElementById('nLink').value };
-        database.ref('modlar').push(n); document.getElementById('adminModal').style.display='none';
+        if(!n.ad) return alert("Mod adı girin!");
+        database.ref('modlar').push(n);
+        document.getElementById('adminModal').style.display = 'none';
+        document.getElementById('nAd').value = "";
     }
-    function modSil(id) { if(confirm("Silinsin mi?")) database.ref('modlar/' + id).remove(); }
-    function toggleRightSide() { document.getElementById('rSide').classList.toggle('closed'); document.getElementById('main').classList.toggle('full'); document.getElementById('tBtn').innerText = document.getElementById('rSide').classList.contains('closed') ? '❯' : '❮'; }
-    function ara(t) { /* Arama mantığı */ }
+
+    function modSil(id) {
+        if(confirm("Bu modu silmek istediğine emin misin?")) {
+            database.ref('modlar/' + id).remove();
+        }
+    }
+
+    function toggleRightSide() {
+        document.getElementById('rSide').classList.toggle('closed');
+        document.getElementById('main').classList.toggle('full');
+        document.getElementById('header').classList.toggle('full');
+        document.getElementById('tBtn').innerText = document.getElementById('rSide').classList.contains('closed') ? '❯' : '❮';
+    }
+
+    function ara(t) {
+        // İsteğe bağlı yerel arama buraya eklenebilir
+    }
 </script>
 </body>
 </html>
