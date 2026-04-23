@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JENIX_EDITIONS | Legend Cloud v31</title>
+    <title>JENIX_EDITIONS | Legend Cloud v32</title>
     <link href="https://googleapis.com" rel="stylesheet">
     
     <!-- Firebase Kütüphaneleri -->
@@ -13,7 +13,7 @@
     <style>
         :root { --ana: #00f2ff; --bg: #030303; --panel: #0a0a0a; --kart: rgba(15, 15, 15, 0.98); --side: 260px; --right: 300px; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Rajdhani', sans-serif; }
-        body { background: var(--bg); color: #fff; display: flex; min-height: 100vh; overflow-x: hidden; padding-bottom: 40px; }
+        body { background: var(--bg); color: #fff; display: flex; min-height: 100vh; overflow-x: hidden; }
 
         /* AÇILIŞ */
         #splash { position: fixed; inset: 0; background: #000; z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: 0.8s; }
@@ -23,18 +23,16 @@
 
         /* SIDEBAR (SOL) */
         .sidebar { width: var(--side); height: 100vh; background: var(--panel); border-right: 2px solid var(--ana); position: fixed; left: 0; top: 0; padding: 40px 20px; z-index: 2000; display: flex; flex-direction: column; }
-        .nav-link { padding: 12px; border-radius: 10px; margin-bottom: 5px; cursor: pointer; font-weight: 700; color: #555; text-transform: uppercase; font-size: 13px; transition: 0.3s; border-left: 0px solid var(--ana); }
+        .nav-link { padding: 14px; border-radius: 10px; margin-bottom: 5px; cursor: pointer; font-weight: 700; color: #555; text-transform: uppercase; font-size: 13px; transition: 0.3s; border-left: 0px solid var(--ana); }
         .nav-link.aktif, .nav-link:hover { color: var(--ana); background: rgba(0, 242, 255, 0.05); border-left: 4px solid var(--ana); padding-left: 18px; }
 
         /* HEADER */
         header { position: fixed; top: 0; left: var(--side); width: calc(100% - var(--side)); height: 80px; background: rgba(0,0,0,0.8); backdrop-filter: blur(15px); display: flex; align-items: center; padding: 0 40px; z-index: 1000; border-bottom: 1px solid rgba(0,242,255,0.1); transition: 0.5s; }
-        header.full { left: var(--side); width: calc(100% - var(--side)); }
         
         /* SAĞ PANEL */
         .right-sidebar { width: var(--right); height: 100vh; background: var(--panel); border-left: 2px solid var(--ana); position: fixed; right: 0; top: 0; padding: 80px 20px 40px; z-index: 2000; transition: 0.5s; }
         .right-sidebar.closed { transform: translateX(100%); }
-        .toggle-btn { position: fixed; right: 20px; top: 20px; width: 40px; height: 40px; background: var(--panel); border: 1px solid var(--ana); color: var(--ana); border-radius: 10px; cursor: pointer; z-index: 3000; display: flex; align-items: center; justify-content: center; font-weight: 900; transition: 0.5s; }
-        .toggle-btn.active { right: calc(var(--right) + 20px); transform: rotate(180deg); }
+        .toggle-btn { position: fixed; right: 20px; top: 20px; width: 40px; height: 40px; background: var(--panel); border: 1px solid var(--ana); color: var(--ana); border-radius: 10px; cursor: pointer; z-index: 3000; display: flex; align-items: center; justify-content: center; font-weight: 900; }
 
         /* İÇERİK ALANI */
         main { margin-left: var(--side); margin-right: var(--right); width: calc(100% - var(--side) - var(--right)); padding: 110px 40px 40px; transition: 0.5s; }
@@ -43,48 +41,42 @@
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 25px; }
         .kart { background: var(--kart); border-radius: 20px; overflow: hidden; border: 1px solid #111; cursor: pointer; transition: 0.4s; position: relative; }
         .kart:hover { border-color: var(--ana); transform: translateY(-8px); }
-        .kart img { width: 100%; height: 170px; object-fit: cover; pointer-events: none; }
-        .del-btn { position: absolute; top: 10px; right: 10px; background: #ff4757; color: #fff; border: none; padding: 5px 12px; border-radius: 5px; cursor: pointer; display: none; z-index: 100; font-weight: 900; font-size: 11px; }
+        .kart img { width: 100%; height: 170px; object-fit: cover; }
+        .del-btn { position: absolute; top: 10px; right: 10px; background: #ff4757; color: #fff; border: none; padding: 5px 12px; border-radius: 5px; cursor: pointer; display: none; z-index: 100; font-weight: 900; }
 
-        /* REKLAM BANDI */
-        .ticker { position: fixed; bottom: 0; left: 0; width: 100%; height: 35px; background: #000; border-top: 2px solid var(--ana); z-index: 5000; overflow: hidden; display: flex; align-items: center; }
-        .ticker-text { white-space: nowrap; animation: ticker 40s linear infinite; color: #fff; font-weight: 700; font-size: 13px; }
-        @keyframes ticker { 0% { transform: translateX(100%); } 100% { transform: translateX(-180%); } }
-
-        /* MODALS */
+        /* MODAL */
         .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.95); display: none; justify-content: center; align-items: center; z-index: 8000; }
         .m-box { background: #000; width: 400px; padding: 30px; border-radius: 25px; border: 1px solid var(--ana); text-align: center; }
         input, select { width: 100%; padding: 12px; margin-bottom: 10px; background: #111; border: 1px solid #333; color: #fff; border-radius: 8px; outline: none; }
-        .btn { width: 100%; padding: 15px; background: var(--ana); border: none; font-weight: 900; cursor: pointer; border-radius: 10px; color: #000; transition: 0.3s; }
-        .btn:hover { background: #fff; }
+        .btn { width: 100%; padding: 15px; background: var(--ana); border: none; font-weight: 900; cursor: pointer; border-radius: 10px; color: #000; }
     </style>
 </head>
-<body onload="init()">
+<body onload="baslat()">
 
 <div id="splash"><div class="logo-load">JENIX_EDITIONS</div></div>
-<button class="toggle-btn" onclick="toggleRightSide()" id="tBtn">❮</button>
+<button class="toggle-btn" onclick="sagPaneliAcKapat()" id="tBtn">❮</button>
 
 <div class="sidebar">
     <div style="font-family:'Orbitron'; color:var(--ana); font-size:20px; text-align:center; margin-bottom:40px;">JENIX<span>_HUB</span></div>
-    <div class="nav-link aktif" onclick="categoryFilter('Hepsi', this)">📂 TÜM ARŞİV</div>
-    <div class="nav-link" onclick="categoryFilter('ETS 2', this)">🚛 ETS 2</div>
-    <div class="nav-link" onclick="categoryFilter('Assetto', this)">🏎️ ASSETTO</div>
-    <div class="nav-link" onclick="categoryFilter('BeamNG', this)">🚗 BEAMNG</div>
-    <div class="nav-link" onclick="categoryFilter('FS 25', this)">🚜 FS 25</div>
+    <div class="nav-link aktif" id="btn-all" onclick="filtrele('Hepsi', this)">📂 TÜM ARŞİV</div>
+    <div class="nav-link" onclick="filtrele('ETS 2', this)">🚛 ETS 2</div>
+    <div class="nav-link" onclick="filtrele('Assetto', this)">🏎️ ASSETTO</div>
+    <div class="nav-link" onclick="filtrele('BeamNG', this)">🚗 BEAMNG</div>
+    <div class="nav-link" onclick="filtrele('FS 25', this)">🚜 FS 25</div>
     
-    <button id="adminLoginBtn" onclick="adminGiris()" style="margin-top:auto; background:none; border:1px solid var(--ana); color:var(--ana); padding:12px; border-radius:10px; cursor:pointer; font-weight:900;">🛠️ ADMİN GİRİŞİ</button>
+    <button id="adminLoginBtn" onclick="adminModuAc()" style="margin-top:auto; background:none; border:1px solid var(--ana); color:var(--ana); padding:12px; border-radius:10px; cursor:pointer; font-weight:900;">🛠️ ADMİN GİRİŞİ</button>
 </div>
 
 <header id="header">
-    <input type="text" placeholder="Mod ara..." onkeyup="ara(this.value)" style="background:#111; border:1px solid #333; color:#fff; padding:10px 25px; border-radius:30px; width:300px; outline:none;">
-    <div id="statusLabel" style="margin-left:auto; font-size:11px; color:#f1c40f; font-weight:900;">🟡 BULUT BAĞLANTISI...</div>
+    <input type="text" placeholder="Modlarda ara..." onkeyup="ara(this.value)" style="background:#111; border:1px solid #333; color:#fff; padding:10px 25px; border-radius:30px; width:300px; outline:none;">
+    <div id="status" style="margin-left:auto; font-size:11px; color:#f1c40f; font-weight:900;">🟡 BAGLANILIYOR...</div>
 </header>
 
 <div class="right-sidebar" id="rSide">
     <div style="background:rgba(255,255,255,0.02); padding:15px; border-radius:15px; border:1px solid #1a1a1a; text-align:center;">
-        <div style="color:var(--ana); font-family:'Orbitron'; font-size:10px; margin-bottom:15px;">TOPLULUK</div>
+        <div style="color:var(--ana); font-family:'Orbitron'; font-size:10px; margin-bottom:15px;">SOSYAL</div>
         <div style="display:flex; justify-content:center; gap:20px;">
-            <a href="https://discord.gg" target="_blank" style="color:#fff;"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.054-.108.001-.23-.106-.271a12.96 12.96 0 0 1-1.883-.898.079.079 0 0 1-.006-.132c.126-.094.252-.192.372-.292a.077.077 0 0 1 .08-.01c3.923 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .08.01c.12.1.246.198.372.292a.079.079 0 0 1-.006.132 12.213 12.213 0 0 1-1.883.898.077.077 0 0 1-.106.271c.36.699.765 1.365 1.226 1.994a.076.076 0 0 0 .084.028 19.83 19.83 0 0 0 6.002-3.03.077.077 0 0 0 .032-.057c.492-5.142-.843-9.612-3.522-13.66a.068.068 0 0 0-.032-.027zM8.02 15.33c-1.18 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.419-2.157 2.419zm7.975 0c-1.18 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.419-2.157 2.419z"/></svg></a>
+            <a href="https://discord.gg" target="_blank" style="color:#fff;"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.054-.108.001-.23-.106-.271a12.96 12.96 0 0 1-1.883-.898.079.079 0 0 1-.006-.132c.126-.094.252-.192.372-.292a.077.077 0 0 1 .08-.01c3.923 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .08.01c.12.1.246.198.372.292a.079.079 0 0 1-.006.132 12.213 12.213 0 0 1-1.883.898.077.077 0 0 1-.106.271c.36.699.765 1.365 1.226 1.994a.076.076 0 0 0 .084.028 19.83 19.83 0 0 0 6.002-3.03.077.077 0 0 0 .032-.057c.492-5.142-.843-9.612-3.522-13.66a.068.068 0 0 0-.032-.027z"/></svg></a>
             <a href="https://tiktok.com" target="_blank" style="color:#fff;"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.9-.32-1.98-.23-2.81.36-.54.38-.89.98-1.02 1.63-.29 1.22.2 2.53 1.16 3.27.97.76 2.33.82 3.39.25 1.03-.57 1.64-1.66 1.67-2.83V.02z"/></svg></a>
         </div>
     </div>
@@ -92,21 +84,19 @@
 
 <main id="main"><div class="grid" id="grid"></div></main>
 
-<div class="ticker"><div class="ticker-text">🚀 JENIX_EDITIONS v31 CLOUD ACTIVE // TIKTOK: @jenix_edition // DISCORD: discord.gg/DNF9kt48fZ // TÜM MODLAR ARTIK BULUTTA!</div></div>
-
-<!-- ADMİN PANELİ MODAL -->
 <div id="adminModal" class="modal">
     <div class="m-box">
-        <h2 style="color:var(--ana); margin-bottom:20px;">YENİ MOD EKLE</h2>
+        <h2 style="color:var(--ana); margin-bottom:20px;">MOD EKLE</h2>
         <input type="text" id="nAd" placeholder="Mod Adı">
         <select id="nKat"><option>ETS 2</option><option>Assetto</option><option>BeamNG</option><option>FS 25</option></select>
-        <input type="text" id="nRes" placeholder="Resim Linki"><input type="text" id="nVer" placeholder="Versiyon"><input type="text" id="nLink" placeholder="Link">
-        <button class="btn" onclick="ekle()">PAYLAŞ</button>
+        <input type="text" id="nRes" placeholder="Resim URL (jpg/png)"><input type="text" id="nVer" placeholder="Versiyon"><input type="text" id="nLink" placeholder="İndirme Linki">
+        <button class="btn" onclick="moduGonder()">HUB'A YÜKLE</button>
         <p onclick="document.getElementById('adminModal').style.display='none'" style="margin-top:10px; color:#444; cursor:pointer;">Kapat</p>
     </div>
 </div>
 
 <script>
+    // FIREBASE AYARLARI
     const firebaseConfig = {
         apiKey: "AIzaSyAwghWuJfYJLYZ60W00S9pXpmaL1vVZ6OU",
         authDomain: "://firebaseapp.com",
@@ -119,66 +109,61 @@
 
     let database;
     let isAdmin = false;
-    let currentCategory = 'Hepsi';
+    let localModData = {};
+    let activeCat = 'Hepsi';
 
-    function init() {
-        setTimeout(() => document.getElementById('splash').classList.add('fade-out'), 2000);
+    function baslat() {
+        setTimeout(() => document.getElementById('splash').classList.add('fade-out'), 1800);
         try {
             firebase.initializeApp(firebaseConfig);
             database = firebase.database();
-            loadData();
-        } catch (e) { document.getElementById('statusLabel').innerHTML = "🔴 BAĞLANTI HATASI"; }
+            
+            // Verileri Canlı Dinle
+            database.ref('modlar').on('value', (snapshot) => {
+                localModData = snapshot.val() || {};
+                document.getElementById('status').innerHTML = "🟢 BULUT AKTİF";
+                document.getElementById('status').style.color = "#2ecc71";
+                ekranaBas();
+            });
+        } catch (e) { document.getElementById('status').innerHTML = "🔴 HATA!"; }
     }
 
-    function loadData() {
-        database.ref('modlar').on('value', (snapshot) => {
-            const data = snapshot.val();
-            document.getElementById('statusLabel').innerHTML = "🟢 BULUT AKTİF";
-            document.getElementById('statusLabel').style.color = "#2ecc71";
-            render(data);
-        });
-    }
-
-    function render(data) {
+    function ekranaBas() {
         const grid = document.getElementById('grid');
         grid.innerHTML = "";
-        if (!data) return;
+        
+        Object.keys(localModData).forEach(id => {
+            const m = localModData[id];
+            if (activeCat !== 'Hepsi' && m.kat !== activeCat) return;
 
-        Object.keys(data).forEach(id => {
-            const m = data[id];
-            if (currentCategory !== 'Hepsi' && m.kat !== currentCategory) return;
-
-            const silBtnStyle = isAdmin ? 'display:block' : 'display:none';
+            const silBtnStil = isAdmin ? 'display:block' : 'display:none';
             grid.innerHTML += `
                 <div class="kart" onclick="window.open('${m.link}')">
                     <span style="position:absolute; top:10px; left:10px; background:#f39c12; color:#000; padding:2px 8px; font-size:10px; font-weight:900; border-radius:4px;">${m.ver || 'v1.0'}</span>
-                    <button class="del-btn" style="${silBtnStyle}" onclick="event.stopPropagation(); modSil('${id}')">SİL</button>
+                    <button class="del-btn" style="${silBtnStil}" onclick="event.stopPropagation(); silMod('${id}')">SİL</button>
                     <img src="${m.res}">
-                    <div style="padding:15px;">
-                        <small style="color:var(--ana)">${m.kat}</small>
-                        <div style="font-weight:700;">${m.ad}</div>
-                    </div>
+                    <div style="padding:15px;"><small style="color:var(--ana)">${m.kat}</small><div style="font-weight:700;">${m.ad}</div></div>
                 </div>`;
         });
     }
 
-    function categoryFilter(kat, el) {
-        currentCategory = kat;
+    function filtrele(kat, el) {
+        activeCat = kat;
         document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('aktif'));
         el.classList.add('aktif');
-        database.ref('modlar').once('value', (snap) => render(snap.val()));
+        ekranaBas();
     }
 
-    function adminGiris() {
-        if(prompt("Yönetici Şifresi:") === "1453") {
+    function adminModuAc() {
+        if(prompt("Şifre:") === "1453") {
             isAdmin = true;
             document.getElementById('adminModal').style.display = 'flex';
-            document.getElementById('adminLoginBtn').innerText = "✅ ADMİN MODU";
-            database.ref('modlar').once('value', (snap) => render(snap.val()));
-        } else { alert("Hatalı!"); }
+            document.getElementById('adminLoginBtn').innerText = "✅ ADMİN AKTİF";
+            ekranaBas();
+        } else { alert("Yanlış!"); }
     }
 
-    function ekle() {
+    function moduGonder() {
         const n = {
             ad: document.getElementById('nAd').value,
             kat: document.getElementById('nKat').value,
@@ -186,31 +171,33 @@
             ver: document.getElementById('nVer').value || "v1.0",
             link: document.getElementById('nLink').value || "#"
         };
-        if(!n.ad) return alert("Ad gir!");
+        if(!n.ad) return alert("Ad yaz!");
         database.ref('modlar').push(n);
         document.getElementById('adminModal').style.display = 'none';
+        // Formu temizle
+        document.getElementById('nAd').value = "";
     }
 
-    function modSil(id) {
-        if(confirm("Siliyorum?")) database.ref('modlar/' + id).remove();
+    function silMod(id) {
+        if(confirm("Bu modu siliyorum?")) database.ref('modlar/' + id).remove();
     }
 
-    function toggleRightSide() {
-        document.getElementById('rSide').classList.toggle('closed');
+    function sagPaneliAcKapat() {
+        const r = document.getElementById('rSide');
+        r.classList.toggle('closed');
         document.getElementById('main').classList.toggle('full');
-        document.getElementById('header').classList.toggle('full');
-        document.getElementById('tBtn').classList.toggle('active');
+        document.getElementById('tBtn').innerText = r.classList.contains('closed') ? '❯' : '❮';
     }
 
     function ara(t) {
-        database.ref('modlar').once('value', (snap) => {
-            const data = snap.val();
-            const filtered = {};
-            if(!data) return;
-            Object.keys(data).forEach(id => {
-                if(data[id].ad.toLowerCase().includes(t.toLowerCase())) filtered[id] = data[id];
-            });
-            render(filtered);
+        const grid = document.getElementById('grid');
+        grid.innerHTML = "";
+        Object.keys(localModData).forEach(id => {
+            const m = localModData[id];
+            if(m.ad.toLowerCase().includes(t.toLowerCase())) {
+                const silBtnStil = isAdmin ? 'display:block' : 'display:none';
+                grid.innerHTML += `<div class="kart" onclick="window.open('${m.link}')"><img src="${m.res}"><div style="padding:15px;"><small>${m.kat}</small><div>${m.ad}</div></div></div>`;
+            }
         });
     }
 </script>
